@@ -21,9 +21,10 @@ const App = () => {
   }
 
   const startParse = () => {
+    if (fileArray.current === undefined)
+      return
     setloaded('轉換中')
     let index = 0
-
     const fileReader = new FileReader();
     fileReader.onload = function (fileLoadedEvent) {
       const iniFile = ini.parse(fileLoadedEvent.target.result);
@@ -61,7 +62,7 @@ const App = () => {
 
   return (
     <div className="container bg-white" style={{height: window.innerHeight + 'px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-      <h2>.ini轉JSON</h2>
+      <h1 style={{alignSelf: 'center', position: 'absolute', top: '50px'}}>.ini轉JSON</h1>
       <input className="form-control" id="upload" type="file" accept=".ini" onChange={(e) => uploadFile(e)} multiple />可多選
       <hr />
       檔案 : {fileName}
