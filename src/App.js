@@ -62,13 +62,13 @@ const App = () => {
   return (
     <div className="container bg-white" style={{height: window.innerHeight + 'px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
       <h2>.ini轉JSON</h2>
-      <input className="form-control" id="upload" type="file" accept=".ini" onChange={(e) => uploadFile(e)} multiple />
+      <input className="form-control" id="upload" type="file" accept=".ini" onChange={(e) => uploadFile(e)} multiple />可多選
       <hr />
       檔案 : {fileName}
       <hr />
       <div>
         <input key={0} type="radio" name="type" value={'84'} defaultChecked={true} onChange={(e) => (e.target.checked === true && setType('84'))} />84個、
-        <input key={1} type="radio" name="type" value={'92'} onChange={(e) => (e.target.checked === true && setType('92'))} />92個 特徵點
+        <input key={1} type="radio" name="type" value={'92'} onChange={(e) => (e.target.checked === true && setType('92'))} />92個 特徵點　　　目前WCM預設84個
       </div>
       <hr />
       模式 : {type}個特徵點
