@@ -1,15 +1,15 @@
 import React, {useState, useRef} from 'react';
-import ini from "ini";
+import ini from "ini"; // 可直接將ini檔轉成object
 
 const App = () => {
-  let fileArray = useRef();
+  let fileArray = useRef(); //上傳檔案的指標
   const [fileName, setFileName] = useState('無');
   const [loaded, setloaded] = useState('預備中');
   const [type, setType] = useState('84');
 
-  const uploadFile = (e) => {
+  const uploadFile = (e) => { //處理上傳的檔案
     setFileName('無')
-    fileArray.current = e.target.files
+    fileArray.current = e.target.files //指標指向的位置
     let tempName = '';
     for (let i = 0; i < e.target.files.length; i++) {
       tempName += e.target.files[i].name;
@@ -30,7 +30,7 @@ const App = () => {
       const iniFile = ini.parse(fileLoadedEvent.target.result);
       const tempFileName = fileArray.current[index].name.split('.')
       getData(iniFile, tempFileName[0]);
-      if (index < fileArray.current.length - 1) {
+      if (index < fileArray.current.length - 1) { //使用for迴圈的話，會因為非同步的關係，造成Readerbuffer阻塞，所以使用recursion
         index++;
         fileReader.readAsText(fileArray.current[index], "UTF-8");
       }
@@ -38,11 +38,12 @@ const App = () => {
     fileReader.readAsText(fileArray.current[index], "UTF-8");
   }
 
-  const getData = (iniFile, name) => {
+  const getData = (iniFile, name) => { //將 ini. 檔轉換成json
     const positionArray = [];
+    const exclude92to84 = [35, 37, 84, 86, 87, 89, 90, 91];
     for (let i = 0; i <= 91; i++) {
       if (type === '84')
-        if (i === 35 || i === 37 || i === 84 || i === 86 || i === 87 || i === 89 || i === 90 || i === 91)
+        if (exclude92to84.includes(i))
           continue
       const position = iniFile.Landmark[`Landmark_${i}`].split(" ");
       const object = {x: parseInt(position[0]), y: parseInt(position[1])};
@@ -52,8 +53,8 @@ const App = () => {
     downloadText(`${name}.json`, newInput)
   }
 
-  const downloadText = (filename, text) => {
-    let element = document.createElement('a');
+  const downloadText = (filename, text) => { //直接在真實的Dom操作下載link，用react的話還要ref
+    let element = document.createElement('a'); 
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
     element.click();
